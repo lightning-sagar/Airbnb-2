@@ -9,7 +9,6 @@ const methodOverride = require('method-override')
 const ejsMate = require('ejs-mate')
 const ExpressError = require('./utils/ExpressError')
 const session = require('express-session')
-const MongoStore = require('connect-mongo')
 const flash = require('connect-flash')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
@@ -19,8 +18,6 @@ const listingsRoutes = require('./routes/listing.js')
 const reviewsRoutes = require('./routes/review.js')
 const usersRoutes = require('./routes/user.js')
 
-const dbURL = process.env.ATLAS_DB 
-
 app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs')
 app.use(express.static(path.join(__dirname, '/public')))
@@ -29,21 +26,8 @@ app.use(express.urlencoded({extended: true}))
 app.use (methodOverride('_method'))
 app.engine('ejs', ejsMate)
  
-const store = MongoStore.create({
-  mongoUrl: dbURL,
-  touchAfter: 24 * 60 * 60,
-  crypto: {
-    secret: process.env.SECRET,
-  },
-})
-
-store.on('error', function (e) {
-  console.log('SESSION STORE ERROR', e)
-})
-
 const sessionOptions = {
-  store,
-  secret: process.env.SECRET,
+  secret: 'thisshouldbeabettersecret!',
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -71,8 +55,9 @@ main().then(()=>{
 })
 .catch(err => console.log(err))
 
+
 async function main() {
-  await mongoose.connect(dbURL)
+  await mongoose.connect('mongodb://127.0.0.1:27017/wanderlust')
 }
 
 app.use((req, res, next) => {
@@ -80,6 +65,7 @@ app.use((req, res, next) => {
   res.locals.error = req.flash('error');
   res.locals.currentUser = req.user;
 
+  // Check if req.session is defined before accessing originalUrl
   if (req.session && req.session.originalUrl) {
     res.locals.originalUrl = req.session.originalUrl;
   }
