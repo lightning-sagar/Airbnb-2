@@ -26,12 +26,25 @@
         
         <div class="mb-3">
           <label for="image" class="form-label">Upload Image</label>
-              <input
-                name="listing[image]"
-                class="form-control"
-                type="file"
-              />
-             
+          <input
+            name="listing[image]"
+            class="form-control"
+            type="file"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="category" class="form-label">Category</label>
+          <select name="listing[category]" class="form-select">
+            <option value="Mountain">Mountain</option>
+            <option value="Rooms">Rooms</option>
+            <option value="Iconic City">Iconic City</option>
+            <option value="Castle">Castle</option>
+            <option value="Pool">Pool</option>
+            <option value="Camping">Camping</option>
+            <option value="Farms">Farms</option>
+            <option value="Arctic">Arctic</option>
+          </select>
         </div>
         
         <div class="row">

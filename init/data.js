@@ -348,5 +348,15 @@ const sampleListings = [
     country: "Costa Rica",
   },
 ];
+function getRandomCategory() {
+  const categories = ["Mountain", "Rooms", "Iconic City", "Castle", "Pool", "Camping", "Farms", "Arctic"];
+  const randomIndex = Math.floor(Math.random() * categories.length);
+  return categories[randomIndex];
+}
+
+// Add category property to each listing
+sampleListings.forEach(listing => {
+  listing.category = getRandomCategory();
+});
 
 module.exports = { data: sampleListings };

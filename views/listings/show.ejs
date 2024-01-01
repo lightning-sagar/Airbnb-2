@@ -11,10 +11,11 @@
           <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listing-image">
           <div class="card-body">
             <p class="card-text">Owned By:<i><%= listing.owner.username %></i></p>
-            <p class="card-text"><%= listing.description %></p>
-            <p class="card-text">  &#8377; <%= listing.price.toLocaleString("en-IN") %></p>
-            <p class="card-text">  <%= listing.location %></p>
-            <p class="card-text">  <%= listing.country %></p>
+            <p class="card-text"> Description: <i><b> <%= listing.description %></b></i></p>
+            <p class="card-text"> Category: <b> <%= listing.category %></b></p>
+            <p class="card-text"> Price: <b> &#8377; <%= listing.price.toLocaleString("en-IN") %></b></p>
+            <p class="card-text"> Location: <b> <%= listing.location %></b></p>
+            <p class="card-text"> Country: <b> <%= listing.country %></b></p>
           </div>
       </div>
       <br />
@@ -59,14 +60,11 @@
         <button class="btn btn-outline-dark">Submit</button>
       </form>
     <% } %>
-
-  </div>
-  <hr>
-
-
-    
-    <p><b>All Reviews </b></p>
+    <hr>
+    <% if(listing.reviews.length>0){ %>
     <div class="row">
+      <p><b>All Reviews </b></p>
+
       <% for (let review of listing.reviews) { %>
         <div class="card col-5 ms-3 mb-3">
           <div class="card-body mt-2">
@@ -81,6 +79,20 @@
         </div>
       <% } %>
     </div>
-  </div>
-</body>
 
+    <% } %></div> 
+  </div>
+
+
+</body>
+<script>
+  let mapToken = "<%= process.env.MAP_TOKEN %>"
+	mapboxgl.accessToken = mapToken;
+  console.log(mapToken);
+  const map = new mapboxgl.Map({
+    container: 'map',
+    style:'mapbox://styles/mapbox/streets-v11',
+    center: [-74.5, 40],
+    zoom: 9, 
+  });
+</script>

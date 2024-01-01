@@ -4,7 +4,6 @@ module.exports.index = async (req, res) => {
     let allListings = await Listing.find({})
     res.render('listings/index.ejs', { allListings})
 }
-
 module.exports.render = async (req, res) => {
     const emptyListing = {
         image: {
@@ -52,14 +51,17 @@ module.exports.RenderEditForm = async (req, res) => {
         req.flash('error','listing not found')
         res.redirect('/listings');
     }
-    res.render('listings/edit.ejs', { listing });
+    let orginialImage = listing.image.url
+    orginialImage = orginialImage.replace('/upload','/upload/w_250')
+    res.render('listings/edit.ejs', { listing , orginialImage});
 }
 
 module.exports.updateListing = async (req, res) => {
+    try{
     let {id}= req.params
     let listing = await Listing.findByIdAndUpdate(id, { ...req.body.listing})
  
-    if (req.file && req.file !== "undefined") {
+    if (typeof req.file !== 'undefined') {
         let filename = req.file.filename
         let url = req.file.path
         listing.image = {
@@ -70,6 +72,12 @@ module.exports.updateListing = async (req, res) => {
     }
     req.flash('success', 'Successfully updated a listing!');
     res.redirect(`/listings/${id}`)
+}
+catch(err){
+    console.log(err);
+    req.flash('error', err.message)
+    res.redirect(`/listings/${id}/edit`)
+}
  };
  
   
@@ -79,4 +87,44 @@ module.exports.deleteListing = async (req, res) => {
     let deletedListing = await Listing.findByIdAndDelete(id)
     req.flash('success', 'Successfully deleted a listing!');
     res.redirect('/listings') 
+}
+
+module.exports.location=async(req,res)=>{
+
+    const country = req.params.country;
+    console.log(country);
+    const allListings = await Listing.find({ country: country });
+    res.render('listings/index.ejs', { allListings });
+}
+module.exports.Rooms=async(req,res)=>{
+    const allListings = await Listing.find({ category: 'Rooms' });
+    res.render('listings/index.ejs',{allListings})
+}
+module.exports.IconicCity=async(req,res)=>{
+    const allListings = await Listing.find({ category: 'Iconic City' });
+    res.render('listings/index.ejs',{allListings})
+}
+module.exports.Mountain=async(req,res)=>{
+    const allListings = await Listing.find({ category: 'Mountain' });
+    res.render('listings/index.ejs',{allListings})
+}
+module.exports.Castle=async(req,res)=>{
+    const allListings = await Listing.find({ category: 'Castle' });
+    res.render('listings/index.ejs',{allListings})
+}
+module.exports.Pool=async(req,res)=>{
+    const allListings = await Listing.find({ category: 'Pool' });
+    res.render('listings/index.ejs',{allListings})
+}
+module.exports.Camping=async(req,res)=>{
+    const allListings = await Listing.find({ category: 'Camping' });
+    res.render('listings/index.ejs',{allListings})
+}
+module.exports.Farms=async(req,res)=>{
+    const allListings = await Listing.find({ category: 'Farms' });
+    res.render('listings/index.ejs',{allListings})
+}
+module.exports.Arctic=async(req,res)=>{
+    const allListings = await Listing.find({ category: 'Arctic' });
+    res.render('listings/index.ejs',{allListings})
 }

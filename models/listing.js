@@ -5,14 +5,17 @@ const Review = require('./review.js')
 const listingSchema = new Schema({
   title: {
     type: String,
-    required: true,
+    required: true, 
   },
   description: String,
   image: {
     url: String,
     filename: String,
   },
-  
+  category:{
+    type: String,
+    enum : ["Mountain", "Rooms", "Iconic City", "Castle", "Pool","Camping","Farms","Arctic"],
+  },
   
   price: Number,
   location: String,
