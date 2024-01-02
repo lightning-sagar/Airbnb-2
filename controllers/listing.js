@@ -5,18 +5,6 @@ module.exports.index = async (req, res) => {
   res.render('listings/index.ejs', { allListings });
 };
 
-module.exports.Arctic = async (req, res) => {
-  const newz = req.params.newz;
-  const allListings = await Listing.find({ category: newz });
-  res.render('listings/index.ejs', { allListings });
-};
-
-module.exports.location = async (req, res, next) => {
-  const country = req.params.country;
-  console.log(country);
-  const allListings = await Listing.find({ country: country });
-  res.render('listings/index.ejs', { allListings });
-};
 
 module.exports.render = async (req, res) => {
   const emptyListing = {

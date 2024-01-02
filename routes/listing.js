@@ -24,10 +24,4 @@ router.route('/:id')
 
 router.get('/:id/edit', isLoggedIn, isOwner, wrapAsync(listingController.RenderEditForm));
 
-// Location-based route
-router.get('/location/:country', wrapAsync(listingController.location));
-
-// Category-based route (Arctic)
-router.get('/category/:newz', wrapAsync(listingController.Arctic));
-
 module.exports = router;

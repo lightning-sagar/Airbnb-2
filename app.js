@@ -13,7 +13,7 @@ const flash = require('connect-flash')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const User = require('./models/user.js')
-
+const filtersRoutes = require('./routes/filters.js')
 const listingsRoutes = require('./routes/listing.js')
 const reviewsRoutes = require('./routes/review.js')
 const usersRoutes = require('./routes/user.js')
@@ -73,6 +73,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/filters', filtersRoutes)
 app.use('/listings', listingsRoutes)
 app.use('/listings/:id/reviews', reviewsRoutes)
 app.use('/', usersRoutes)   
