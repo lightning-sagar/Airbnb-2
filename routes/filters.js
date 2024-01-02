@@ -7,6 +7,6 @@ const filtersController = require ('../controllers/filters');
 
 router.get('/:newz', wrapAsync(filtersController.Arctic));
 
-router.get('/:country', wrapAsync(filtersController.location));
+router.get('/new/:country', wrapAsync(filtersController.location));
 
 module.exports = router;
