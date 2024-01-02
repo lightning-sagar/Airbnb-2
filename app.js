@@ -9,6 +9,7 @@ const methodOverride = require('method-override')
 const ejsMate = require('ejs-mate')
 const ExpressError = require('./utils/ExpressError')
 const session = require('express-session')
+const MongoStore = require('connect-mongo')
 const flash = require('connect-flash')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
@@ -25,9 +26,23 @@ app.set ('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({extended: true}))
 app.use (methodOverride('_method'))
 app.engine('ejs', ejsMate)
- 
+
+const dbUrl = process.env.ATLAS_DB
+
+
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  touchAfter: 24 * 60 * 60,
+  crypto: {
+    secret: process.env.SECRET
+  }
+})
+store.on('error', function(e){
+  console.log('SESSION STORE ERROR', e)
+})
 const sessionOptions = {
-  secret: 'thisshouldbeabettersecret!',
+  store,
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -36,7 +51,6 @@ const sessionOptions = {
     httpOnly: true,
   },
 };
-
 app.use(session(sessionOptions));
 
 app.use(session(sessionOptions));
@@ -57,12 +71,12 @@ main().then(()=>{
 
 
 async function main() {
-  await mongoose.connect('mongodb://127.0.0.1:27017/wanderlust')
+  await mongoose.connect(dbUrl)
 }
 
-app.get('/', (req, res) => {
-  res.redirect('/listings')
-})
+// app.get('/', (req, res) => {
+//   res.redirect('/listings')
+// })
 
 app.use((req, res, next) => {
   res.locals.success = req.flash('success');
